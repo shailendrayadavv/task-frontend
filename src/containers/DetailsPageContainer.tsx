@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { CompetitionsService } from "../services/competitions";
 import { CompetitionsItem } from "../component/CompetitionItem";
 import { ContinentsService } from "../services/continent";
+import Download from "react-json-to-csv";
 
 export interface ICompetition {
   id: number;
@@ -33,6 +34,14 @@ export const DetailsContainer = () => {
   const [continentList, setContinentList] = useState<IContinent[]>([]);
   const [continent, setContinent] = useState(0);
 
+  const downloadCsv = () => {
+    CompetitionsService.getCompetitions({ sportId, fetchAll: true }).then(
+      (response) => {
+        const allCompetitions = response;
+        CompetitionsService.downloadCSV(allCompetitions);
+      }
+    );
+  };
   useEffect(() => {
     if (page === 0) {
       setPage(1);
@@ -46,11 +55,10 @@ export const DetailsContainer = () => {
         continentId: continent,
       }).then((response) => {
         const newCompetitions = response as ICompetition[];
-        if (!newCompetitions.length) {
+        if (newCompetitions.length < 10) {
           setAllFetched(true);
-        } else {
-          setCompetitions([...competitions, ...newCompetitions]);
         }
+        setCompetitions([...competitions, ...newCompetitions]);
         setIsloading(false);
       });
     }
@@ -64,7 +72,6 @@ export const DetailsContainer = () => {
   }, []);
 
   useEffect(() => {
-    console.log(page);
     setCompetitions([]);
     setAllFetched(false);
     setPage(0);
@@ -92,6 +99,7 @@ export const DetailsContainer = () => {
             ))}
           </select>
         </div>
+        <button onClick={downloadCsv}>Download csv</button>
       </div>
       <div className="">
         <table id="commonTable">
@@ -106,7 +114,10 @@ export const DetailsContainer = () => {
           ))}
         </table>
       </div>
-      <button disabled={allFetched && !isLoading} onClick={() => handleClick()}>
+      <button
+        disabled={allFetched || isLoading || !competitions.length}
+        onClick={() => handleClick()}
+      >
         Show more
       </button>
     </div>

@@ -24,11 +24,10 @@ export const SportsCard = ({ id }: IProps) => {
     if (!allFetched) {
       SportsService.getSports({ season: id, page }).then((response) => {
         const newSports = response as ISportsItem[];
-        if (!newSports.length) {
+        if (newSports.length < 10) {
           setAllFetched(true);
-        } else {
-          setSports([...sports, ...newSports]);
         }
+        setSports([...sports, ...newSports]);
         setIsloading(false);
       });
     }
@@ -51,6 +50,8 @@ export const SportsCard = ({ id }: IProps) => {
         flexDirection: "column",
         gap: "10px",
         boxShadow: "2px 2px 2px 2px lightblue",
+        maxHeight: "300px",
+        overflow: "auto",
       }}
     >
       <>{id}</>
@@ -61,7 +62,10 @@ export const SportsCard = ({ id }: IProps) => {
           </div>
         ))}
       </div>
-      <button disabled={allFetched && !isLoading} onClick={() => handleClick()}>
+      <button
+        disabled={allFetched || isLoading || !sports.length}
+        onClick={() => handleClick()}
+      >
         Show more
       </button>
     </div>

@@ -8,7 +8,7 @@ export const SportsItem = ({ details }: IProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/details?sport=${details.name}&id=${details.id}`);
+    navigate(`/competitions?sport=${details.name}&id=${details.id}`);
   };
 
   return (
