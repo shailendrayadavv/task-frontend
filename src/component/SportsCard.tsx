@@ -50,11 +50,12 @@ export const SportsCard = ({ id }: IProps) => {
         flexDirection: "column",
         gap: "10px",
         boxShadow: "2px 2px 2px 2px lightblue",
-        maxHeight: "300px",
+        height: "300px",
         overflow: "auto",
+        width: "200px",
       }}
     >
-      <>{id}</>
+      <div>{id}</div>
       <div>
         {sports.map((sport) => (
           <div key={sport.id}>
@@ -62,6 +63,7 @@ export const SportsCard = ({ id }: IProps) => {
           </div>
         ))}
       </div>
+      {isLoading && <div>Loading</div>}
       <button
         disabled={allFetched || isLoading || !sports.length}
         onClick={() => handleClick()}

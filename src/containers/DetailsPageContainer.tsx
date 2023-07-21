@@ -120,6 +120,8 @@ export const DetailsContainer = () => {
       >
         Show more
       </button>
+      {isLoading && <div>loading</div>}
+      {!isLoading && !competitions.length && <>No data</>}
     </div>
   );
 };

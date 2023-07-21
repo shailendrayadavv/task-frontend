@@ -86,6 +86,10 @@ button {
 button:disabled {
   opacity: 0;
 }
+button:hover {
+  cursor: pointer;
+  background-color: #81d2e8;
+}
 
 #sportsItem {
   color: gray;
